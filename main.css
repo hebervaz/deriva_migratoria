@@ -1,0 +1,57 @@
+/* Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  /* Espacio vacío */
+  body {
+    width: 100vw;
+    height: 100vh;
+    background: #08141b;
+    overflow: hidden;
+    cursor: none !important;
+    user-select: none;
+  }
+  
+  /* Campo principal */
+  #space {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    background: radial-gradient(
+      circle at center,
+      rgba(40, 80, 90, 0.25),
+      rgba(5, 15, 25, 1)
+    );
+    filter: blur(0.5px);
+    overflow: hidden;
+  }
+
+  
+  
+  /* Pulsaciones difusas */
+  .pulse {
+    position: absolute;
+    width: 230px; /* antes 180 */
+    height: 223px;
+    background: radial-gradient(
+      circle,
+      rgba(170, 230, 220, 0.5),
+      rgba(170, 230, 220, 0.08),
+      transparent 75%
+    );
+    border-radius: 50%;
+    filter: blur(22px); /* antes 18 */
+    opacity: 0.45;
+    animation: breathe 6s ease-in-out infinite;
+    transition: transform 0.35s ease, filter 0.35s ease, opacity 0.35s ease;
+  }
+  
+  /* Respiración */
+  @keyframes breathe {
+    0%   { transform: scale(0.9); }
+    50%  { transform: scale(1.1); }
+    100% { transform: scale(0.9); }
+  }

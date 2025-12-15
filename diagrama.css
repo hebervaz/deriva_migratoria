@@ -1,0 +1,261 @@
+/* =========================================================
+   RESET
+   ========================================================= */
+
+   * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  /* =========================================================
+     BODY / CURSOR
+     ========================================================= */
+  
+  body {
+    width: 100vw;
+    height: 100vh;
+    background: #08141b;
+    overflow: hidden;
+    cursor: none;
+    user-select: none;
+    font-family: sans-serif;
+  }
+  
+  .cursor-dot {
+    width: 2px;
+    height: 2px;
+    background: rgba(255,255,255,0.7);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+  }
+  
+  /* =========================================================
+     ESPACIO / FONDO
+     ========================================================= */
+  
+  #space {
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(
+      circle at center,
+      rgba(40, 80, 90, 0.2),
+      rgba(5, 15, 25, 1)
+    );
+    position: relative;
+  }
+  
+  /* =========================================================
+     GALERÍA — COMPOSICIÓN MIGRATORIA EN V
+     ========================================================= */
+  
+.gallery {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-content: flex-start;   /* clave */
+  gap: 6vw;
+  padding-top: 12vh;           /* sube el conjunto */
+  padding-left: 8vw;
+  padding-right: 8vw;
+  padding-bottom: 14vh;
+  transition: transform 1.2s ease, opacity 1.2s ease;
+}
+  
+  /* =========================================================
+     TARJETA BASE
+     ========================================================= */
+  
+  .card {
+    flex: 0 0 22%;
+    max-width: 220px;
+    height: 120px;
+    perspective: 1200px;
+    opacity: 0.65;
+    transition: opacity 0.4s ease, transform 0.4s ease;
+  }
+  
+  .card:hover {
+    opacity: 1;
+    transform: scale(1.03);
+  }
+  
+  /* =========================================================
+     ORDEN EXPLÍCITO (FORMA DE V)
+     ========================================================= */
+  
+  .card[data-id="obra"]       { order: 1; }
+  .card[data-id="autor"]      { order: 2; }
+  .card[data-id="magneto"]    { order: 3; }
+  .card[data-id="cosmo"]      { order: 4; }
+  
+  .card[data-id="tecno"]      { order: 5; }
+  .card.restart               { order: 6; }
+  .card[data-id="organismo"] { order: 7; }
+  
+  .card[data-id="tecno"],
+  .card[data-id="organismo"] {
+    margin-top: 8vh;
+  }
+  
+  /* =========================================================
+     TARJETA "REPETIR EXPERIENCIA"
+     ========================================================= */
+  
+  .card.restart {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 6vh;
+    width: 160px;
+    height: 100px;
+    opacity: 0.45;
+    z-index: 5;
+  }
+  
+  .card.restart:hover {
+    opacity: 0.8;
+    transform: translateX(-50%) scale(1.02);
+  }
+  
+  .card.restart h3 {
+    font-size: 0.8rem;
+    letter-spacing: 0.12em;
+    opacity: 0.8;
+  }
+  
+  /* =========================================================
+     INTERIOR FLIP
+     ========================================================= */
+  
+  .card-inner {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.8s ease;
+  }
+  
+  .card.active .card-inner {
+    transform: rotateY(180deg) scale(1.4);
+  }
+  
+  /* =========================================================
+     CARAS
+     ========================================================= */
+  
+  .card-front,
+  .card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    border-radius: 12px;
+    background: rgba(255,255,255,0.08);
+    backdrop-filter: blur(12px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: rgba(255,255,255,0.85);
+    padding: 12px;
+  }
+  
+  .card-front h3 {
+    font-size: 0.9rem;
+    letter-spacing: 0.05em;
+  }
+  
+  .card-back {
+    transform: rotateY(180deg);
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  /* =========================================================
+     OVERLAY
+     ========================================================= */
+  
+  #overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.35);
+    backdrop-filter: blur(6px);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s ease;
+  }
+  
+  #overlay.active {
+    opacity: 1;
+    pointer-events: all;
+  }
+  
+  /* =========================================================
+     MIGRACIÓN COLECTIVA
+     ========================================================= */
+  
+  .gallery.migrate {
+    transform: translateY(40vh);
+    opacity: 0;
+  }
+
+  
+  
+  /* =========================================================
+     RESPONSIVE / MÓVIL
+     ========================================================= */
+  
+  @media (max-width: 768px) {
+  
+    body {
+      cursor: default;
+    }
+  
+    .gallery {
+      position: relative;
+      flex-direction: column;
+      align-content: flex-start;
+      gap: 32px;
+      padding: 48px 16px;
+      overflow-y: auto;
+    }
+  
+    .card {
+      flex: none;
+      width: 90%;
+      max-width: 320px;
+      height: 180px;
+      margin-top: 0 !important;
+    }
+  
+    .card-inner {
+      transform: none !important;
+    }
+  
+    .card.active .card-inner {
+      transform: none;
+    }
+  
+    .card-back {
+      position: relative;
+      transform: none;
+      backface-visibility: visible;
+    }
+  
+    #overlay {
+      display: none;
+    }
+  
+    .card.restart {
+      position: static;
+      transform: none;
+      order: 999;
+      width: 90%;
+      max-width: 320px;
+    }
+  }

@@ -33,7 +33,7 @@
   }
   
   /* =========================================================
-     ESPACIO / FONDO
+     ESPACIO / FONDO  (NO TOCAR)
      ========================================================= */
   
   #space {
@@ -48,23 +48,23 @@
   }
   
   /* =========================================================
-     GALERÍA — COMPOSICIÓN MIGRATORIA EN V
+     GALERÍA — COMPOSICIÓN MIGRATORIA (NO TOCAR)
      ========================================================= */
   
-.gallery {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-content: flex-start;   /* clave */
-  gap: 6vw;
-  padding-top: 12vh;           /* sube el conjunto */
-  padding-left: 8vw;
-  padding-right: 8vw;
-  padding-bottom: 14vh;
-  transition: transform 1.2s ease, opacity 1.2s ease;
-}
+  .gallery {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-content: flex-start;
+    gap: 6vw;
+    padding-top: 12vh;
+    padding-left: 8vw;
+    padding-right: 8vw;
+    padding-bottom: 14vh;
+    transition: transform 1.2s ease, opacity 1.2s ease;
+  }
   
   /* =========================================================
      TARJETA BASE
@@ -74,9 +74,9 @@
     flex: 0 0 22%;
     max-width: 220px;
     height: 120px;
-    perspective: 1200px;
+    perspective: 1400px;
     opacity: 0.65;
-    transition: opacity 0.4s ease, transform 0.4s ease;
+    transition: opacity 0.4s ease;
   }
   
   .card:hover {
@@ -85,7 +85,7 @@
   }
   
   /* =========================================================
-     ORDEN EXPLÍCITO (FORMA DE V)
+     ORDEN EN V (NO TOCAR)
      ========================================================= */
   
   .card[data-id="obra"]       { order: 1; }
@@ -103,7 +103,7 @@
   }
   
   /* =========================================================
-     TARJETA "REPETIR EXPERIENCIA"
+     TARJETA REINICIO (NO TOCAR)
      ========================================================= */
   
   .card.restart {
@@ -122,14 +122,8 @@
     transform: translateX(-50%) scale(1.02);
   }
   
-  .card.restart h3 {
-    font-size: 0.8rem;
-    letter-spacing: 0.12em;
-    opacity: 0.8;
-  }
-  
   /* =========================================================
-     INTERIOR FLIP
+     INTERIOR
      ========================================================= */
   
   .card-inner {
@@ -137,11 +131,6 @@
     height: 100%;
     position: relative;
     transform-style: preserve-3d;
-    transition: transform 0.8s ease;
-  }
-  
-  .card.active .card-inner {
-    transform: rotateY(180deg) scale(1.4);
   }
   
   /* =========================================================
@@ -151,43 +140,114 @@
   .card-front,
   .card-back {
     position: absolute;
-    width: 100%;
-    height: 100%;
-    backface-visibility: hidden;
+    inset: 0;
     border-radius: 12px;
-    background: rgba(255,255,255,0.08);
-    backdrop-filter: blur(12px);
     display: flex;
     justify-content: center;
     align-items: center;
-    text-align: center;
-    color: rgba(255,255,255,0.85);
-    padding: 12px;
   }
   
-  .card-front h3 {
-    font-size: 0.9rem;
-    letter-spacing: 0.05em;
+  /* FRONT — ÍCONO */
+  
+  .card-front {
+    background: transparent;
   }
+  
+  .card-front img {
+    width: 80px;
+    height: auto;
+    pointer-events: none;
+    transform-origin: center center;
+    backface-visibility: hidden;
+  }
+  
+  /* BACK — CONTENIDO */
   
   .card-back {
-    transform: rotateY(180deg);
-    flex-direction: column;
-    gap: 12px;
+    opacity: 0;
+    pointer-events: none;
+    background: rgba(10, 18, 24, 0.96);
+    backdrop-filter: blur(10px);
+    color: rgba(255,255,255,0.95);
+    padding: 24px;
+    text-align: center;
+  }
+  
+  /* IMAGEN GRANDE REAL */
+  
+  .card-back img {
+    width: 80vw;
+    max-width: 1000px;
+    max-height: 90vh;
+    height: auto;
+    object-fit: contain;
+    border-radius: 6px;
   }
   
   /* =========================================================
-     OVERLAY
+     ESTADO ACTIVO (CENTRADO REAL)
+     ========================================================= */
+  
+  .card.active {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 9998;
+    opacity: 1;
+  }
+  
+  /* SOLO GIRA EL FRONT */
+  
+  .card.active .card-front {
+    animation: flipFront 0.8s cubic-bezier(.22,.61,.36,1) forwards;
+  }
+  
+  /* BACK APARECE SIN MOVERSE */
+  
+  .card.active .card-back {
+    opacity: 1;
+    pointer-events: auto;
+    animation: showBack 0.3s ease forwards;
+  }
+  
+  /* =========================================================
+     ANIMACIONES
+     ========================================================= */
+  
+  @keyframes flipFront {
+    from {
+      transform: rotateY(0deg);
+      opacity: 1;
+    }
+    to {
+      transform: rotateY(180deg);
+      opacity: 0;
+    }
+  }
+  
+  @keyframes showBack {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  
+  /* =========================================================
+     OVERLAY (BLUR + CIERRE)
      ========================================================= */
   
   #overlay {
     position: fixed;
     inset: 0;
     background: rgba(0,0,0,0.35);
-    backdrop-filter: blur(6px);
+    backdrop-filter: blur(9px);
     opacity: 0;
     pointer-events: none;
     transition: opacity 0.4s ease;
+    z-index: 9990;
   }
   
   #overlay.active {
@@ -196,18 +256,16 @@
   }
   
   /* =========================================================
-     MIGRACIÓN COLECTIVA
+     MIGRACIÓN COLECTIVA (REINICIO)
      ========================================================= */
   
   .gallery.migrate {
     transform: translateY(40vh);
     opacity: 0;
   }
-
-  
   
   /* =========================================================
-     RESPONSIVE / MÓVIL
+     RESPONSIVE
      ========================================================= */
   
   @media (max-width: 768px) {
@@ -219,32 +277,20 @@
     .gallery {
       position: relative;
       flex-direction: column;
-      align-content: flex-start;
       gap: 32px;
       padding: 48px 16px;
       overflow-y: auto;
     }
   
     .card {
-      flex: none;
       width: 90%;
       max-width: 320px;
       height: 180px;
-      margin-top: 0 !important;
     }
   
-    .card-inner {
-      transform: none !important;
-    }
-  
-    .card.active .card-inner {
-      transform: none;
-    }
-  
-    .card-back {
-      position: relative;
-      transform: none;
-      backface-visibility: visible;
+    .card-back img {
+      width: 90vw;
+      max-height: 50vh;
     }
   
     #overlay {
@@ -256,6 +302,5 @@
       transform: none;
       order: 999;
       width: 90%;
-      max-width: 320px;
     }
   }

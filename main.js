@@ -15,7 +15,7 @@
     let stabilized = false;
 
     // tiempo requerido en milisegundos
-    const REQUIRED_SLOW_TIME = 6000;
+    const REQUIRED_SLOW_TIME = 4000;
    
    
    /* =========================================================
